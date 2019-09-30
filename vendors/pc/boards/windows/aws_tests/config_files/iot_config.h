@@ -31,4 +31,7 @@
 /* Include the common configuration file for FreeRTOS. */
 #include "iot_config_common.h"
 
+#define IOT_LOG_LEVEL_NETWORK                   IOT_LOG_DEBUG
+#define IOT_LOG_LEVEL_HTTPS                     IOT_LOG_DEBUG
+
 #endif /* ifndef IOT_CONFIG_H_ */
