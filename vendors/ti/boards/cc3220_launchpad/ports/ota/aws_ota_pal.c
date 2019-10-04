@@ -188,6 +188,9 @@ OTA_Err_t prvPAL_CreateFileForRx(OTA_FileContext_t *C)
                           SL_FS_CREATE_MAX_SIZE( OTA_MAX_MCU_IMAGE_SIZE ) );
                 /* The file remains open until the OTA agent calls prvPAL_CloseFile() after transfer or failure. */
                 lResult = sl_FsOpen( ( _u8* ) C->pucFilePath, ( _u32 ) ulFlags, ( _u32* ) &ulToken );
+                configPRINTF(("File path %s\r\n", C->pucFilePath));
+                configPRINTF(("Flags %d\r\n", ulFlags));
+                configPRINTF(("File handle is %d\r\n", lResult));
                 if ( lResult > 0 )
                 {
                     OTA_LOG_L1("[%s] Receive file created. Token: %u\r\n", OTA_METHOD_NAME, ulToken);
@@ -303,6 +306,9 @@ OTA_Err_t prvPAL_CloseFile( OTA_FileContext_t *C )
 	/* Let SimpleLink API handle error checks so we get an error code for free. */
 	OTA_LOG_L1( "[%s] Authenticating and closing file.\r\n", OTA_METHOD_NAME );
 	lResult = ( int32_t ) sl_FsClose( ( _i32 ) ( C->lFileHandle ), C->pucCertFilepath, C->pxSignature->ucData, ( _u32 ) ( C->pxSignature->usSize ) );
+    configPRINTF(("File handles is %d\r\n", C->lFileHandle));
+    configPRINTF(("Cert file path is %s\r\n", C->pucCertFilepath));
+    configPRINTF(("Signature size is %d\r\n", C->pxSignature->usSize));
     configPRINTF(("Error code returned from sl_FsClose is %d \r\n", lResult));
 
 	switch ( lResult )
