@@ -303,6 +303,7 @@ OTA_Err_t prvPAL_CloseFile( OTA_FileContext_t *C )
 	/* Let SimpleLink API handle error checks so we get an error code for free. */
 	OTA_LOG_L1( "[%s] Authenticating and closing file.\r\n", OTA_METHOD_NAME );
 	lResult = ( int32_t ) sl_FsClose( ( _i32 ) ( C->lFileHandle ), C->pucCertFilepath, C->pxSignature->ucData, ( _u32 ) ( C->pxSignature->usSize ) );
+    configPRINTF(("Error code returned from sl_FsClose is %d \r\n", lResult));
 
 	switch ( lResult )
 	{
@@ -323,12 +324,14 @@ OTA_Err_t prvPAL_CloseFile( OTA_FileContext_t *C )
 	    case SL_ERROR_FS_WRONG_CERTIFICATE_FILE_NAME:
 	    case SL_ERROR_FS_NO_CERTIFICATE_STORE:
 	    {
+            configPRINTF(("One of the case statements was hit\r\n"));
             xReturnCode = ( uint32_t ) kOTA_Err_SignatureCheckFailed | ( ( ( uint32_t ) lResult ) & ( uint32_t ) kOTA_PAL_ErrMask );   /*lint !e571 intentionally cast lResult to larger composite error code. */
             break;
 	    }
 
 	    default:    /*lint -e788 Keep lint quiet about the obvious unused states we're catching here. */
 	    {
+            configPRINTF(("Default error condition hit\r\n"));
 	        xReturnCode = ( uint32_t ) kOTA_Err_FileClose | ( ( ( uint32_t ) lResult ) & ( uint32_t ) kOTA_PAL_ErrMask );   /*lint !e571 intentionally cast lResult to larger composite error code. */
 	        break;
 	    }
