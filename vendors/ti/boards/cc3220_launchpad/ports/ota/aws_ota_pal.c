@@ -336,6 +336,8 @@ OTA_Err_t prvPAL_CloseFile( OTA_FileContext_t *C )
 	        break;
 	    }
 	}
+
+    configPRINTF(("Return code is %d\r\n", xReturnCode));
 	return xReturnCode;
 }
 
