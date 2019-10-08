@@ -64,12 +64,12 @@ void prvSetDataInterface(OTA_Interface_t * pxInterface, uint8_t *  pucProtocol)
 	   pxInterface->xDataInterface.prvCleanup = prvCleanup_Mqtt;
    }
 #ifdef OTA_DATA_OVER_HTTP
-   else if(NULL != strstr(pucProtocol, OTA_SECONDARY_DATA_PROTOCOL))
+   else if(NULL != strstr((const char*)pucProtocol, OTA_SECONDARY_DATA_PROTOCOL))
    {
-	   pxInterface->xDataInterface.prvInitFileTransfer = prvInitFileTransfer_Http;
-	   pxInterface->xDataInterface.prvRequestFileBlock = prvRequestFileBlock_Http;
-	   pxInterface->xDataInterface.prvDecodeFileBlock = prvDecodeFileBlock_Http;
-       pxInterface->xDataInterface.prvCleanup = prvCleanup_Http;
+	   pxInterface->xDataInterface.prvInitFileTransfer = _AwsIotOTA_InitFileTransfer_HTTP;
+	   pxInterface->xDataInterface.prvRequestFileBlock = _AwsIotOTA_RequestDataBlock_HTTP;
+	   pxInterface->xDataInterface.prvDecodeFileBlock = _AwsIotOTA_DecodeFileBlock_HTTP;
+       pxInterface->xDataInterface.prvCleanup = _AwsIotOTA_Cleanup_HTTP;
    }
 #endif
 

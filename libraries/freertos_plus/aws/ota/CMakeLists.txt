@@ -26,7 +26,7 @@ afr_module_sources(
         "${src_dir}/mqtt/aws_iot_ota_cbor.h"
         "${src_dir}/mqtt/aws_iot_ota_mqtt.c"
         "${src_dir}/mqtt/aws_iot_ota_mqtt.h"
-        "${src_dir}/http/aws_iot_ota_http.h"
+        "${src_dir}/http/aws_iot_ota_http.c"
         "${src_dir}/http/aws_iot_ota_http.h"
 )
 

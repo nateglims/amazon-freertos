@@ -23,52 +23,26 @@
  * http://www.FreeRTOS.org
  */
 
-#ifndef __AWS_IOT_OTA_INTERFACE__H__
-#define __AWS_IOT_OTA_INTERFACE__H__
+#ifndef __AWS_OTA_HTTP__H__
+#define __AWS_OTA_HTTP__H__
 
 /* OTA includes. */
 #include "aws_iot_ota_agent.h"
 #include "aws_iot_ota_agent_internal.h"
 
-#define OTA_PRIMARY_DATA_PROTOCOL    "MQTT"
-#define OTA_SECONDARY_DATA_PROTOCOL  "HTTP"
 
-#define OTA_DATA_OVER_MQTT
-#define OTA_DATA_OVER_HTTP
+OTA_Err_t _AwsIotOTA_InitFileTransfer_HTTP( OTA_AgentContext_t* pxAgentCtx );
 
-typedef struct
-{
-	OTA_Err_t(*prvRequestJob)(OTA_AgentContext_t* pAgentCtx);
-	OTA_Err_t(*prvUpdateJobStatus)(OTA_AgentContext_t* pxAgentCtx,
-		OTA_JobStatus_t eStatus,
-		int32_t lReason,
-		int32_t lSubReason);
+OTA_Err_t _AwsIotOTA_RequestDataBlock_HTTP( OTA_AgentContext_t* pxAgentCtx );
 
-} OTA_ControlInterface_t;
+OTA_Err_t _AwsIotOTA_DecodeFileBlock_HTTP( uint8_t * pMessageBuffer,
+                                           size_t messageSize,
+                                           int32_t * pFileId,
+                                           int32_t * pBlockId,
+                                           int32_t * pBlockSize,
+                                           uint8_t ** pPayload,
+                                           size_t * pPayloadSize );
 
-typedef struct
-{
-	OTA_Err_t(*prvInitFileTransfer)(OTA_AgentContext_t* pAgentCtx);
-	OTA_Err_t(*prvRequestFileBlock)(OTA_AgentContext_t* pAgentCtx);
-	OTA_Err_t(*prvDecodeFileBlock)( uint8_t* pucMessageBuffer,
-		size_t xMessageSize,
-		int32_t* plFileId,
-		int32_t* plBlockId,
-		int32_t* plBlockSize,
-		uint8_t** ppucPayload,
-		size_t* pxPayloadSize);
-	OTA_Err_t(*prvCleanup)(OTA_AgentContext_t* pAgentCtx);
-
-} OTA_DataInterface_t;
-
-typedef struct
-{
-	OTA_ControlInterface_t xControlInterface;
-	OTA_DataInterface_t xDataInterface;
-} OTA_Interface_t;
-
-void prvSetControlInterface(OTA_Interface_t* pxInterface);
-
-void prvSetDataInterface(OTA_Interface_t* pxInterface, uint8_t* pucProtocol);
+OTA_Err_t _AwsIotOTA_Cleanup_HTTP( OTA_AgentContext_t* pxAgentCtx );
 
 #endif
