@@ -406,15 +406,8 @@ static void _httpResponseCompleteCallback( void * pPrivateData,
 
     /* Process the HTTP response body. */
     _httpProcessResponseBody( _httpDownloader.pAgentCtx, pResponseBodyBuffer, _httpDownloader.currBlockSize );
-    /* Set the file block to next one. */
-    _httpDownloader.currBlock += 1;
 
-    OTA_FUNCTION_CLEANUP_BEGIN();
-
-    /* Reset the isDownloading flag. */
-    _httpDownloader.isDownloading = false;
-
-    OTA_FUNCTION_CLEANUP_END();
+    OTA_FUNCTION_NO_CLEANUP();
 }
 
 static void _httpErrorCallback( void * pPrivateData,
@@ -880,11 +873,17 @@ OTA_Err_t _AwsIotOTA_DecodeFileBlock_HTTP( uint8_t * pMessageBuffer,
     *pBlockSize = _httpDownloader.currBlockSize;
     *pPayloadSize = _httpDownloader.currBlockSize;
 
+    /* Reset the isDownloading flag. */
+    _httpDownloader.isDownloading = false;
+    /* Current block is processed, Set the file block to next one. */
+    _httpDownloader.currBlock += 1;
+
     return kOTA_Err_None;
 }
 
 
 OTA_Err_t _AwsIotOTA_Cleanup_HTTP( OTA_AgentContext_t * pAgentCtx )
 {
+    memset( &_httpDownloader, 0, sizeof( _httpDownloader_t ) );
     return kOTA_Err_None;
 }
